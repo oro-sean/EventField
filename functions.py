@@ -274,7 +274,7 @@ def plot_race(startDict, raceEvents, rawLog, marksDict, raceIndex):
     import matplotlib.pyplot as plt
     import seaborn as sns
     import numpy as np
-    plots = []
+    plots = {}
 
     for startNo in startDict.keys():
         if raceEvents[startNo][0]:
@@ -302,11 +302,13 @@ def plot_race(startDict, raceEvents, rawLog, marksDict, raceIndex):
                 markCount += 1
 
         else:
+
             fig = plt.figure()
             plotFrame = rawLog.iloc[startDict[startNo][0]-360:raceIndex[startNo][1]]
             sns.scatterplot(data = plotFrame, x ='Lat', y = 'Lon').set(title='Race # '+str(startNo)+" "+str(startDict[startNo][-1]))
+            plt.plot([startDict[startNo][2], startDict[startNo][4]], [startDict[startNo][3], startDict[startNo][5]], linewidth = 2)
 
-        plots.append(fig)
+        plots[startNo] = fig
         plt.close(fig)
 
     return plots
@@ -495,7 +497,7 @@ def build_top_pane():
     button_loadFile = widgets.Button(
         description='Load Log and Config File'
     )
-    #button_loadFile.on_click(load_and_process_worker())
+
 
     selector_box = widgets.HBox([log_file_chooser,config_file_chooser])
     buttons_box = widgets.HBox([button_loadFile, checkbox_dont_load_config])
